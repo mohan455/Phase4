@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Joes_Pizza_Shop.Models.PizzaItem>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>The Menu</title>
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/retain-position.js"></script>
+
+</head>
+<body data-spy="scroll" data-target="#navbar">
+    <div class="boxed-page">
+        <!-- Menu Section -->
+        <section id="gtco-menu" class="section-padding">
+            <div class="container">
+                <div class="section-content">
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <div class="heading-section text-center">
+                                <span class="subheading">
+                                    Specialties
+                                </span>
+                                <h2>
+                                    Our Menu
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-lg-6 menus d-flex">
+                                <div class="menu-img">
+                                    <img class=".img-square" src="/PizzaImages/@item.image" asp-append-version="true" alt="">
+                                </div>
+                                <div class="text-wrap">
+                                    <div class="row align-items-start">
+                                        <div class="col-8">
+                                            <h4>@Html.DisplayFor(modelItem => item.PizzaName)</h4>
+                                            <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <h4 class="text-muted menu-price">$@Html.DisplayFor(modelItem => item.Price)</h4>
+                                            <div class="text-right">                                             
+                                                <a href="/Home/AddToCart/@item.PID" class="btn btn-primary" style="padding: 3px 12px !important;"><img class="img-style" style="width:20px; height:20px" src="/img/add.png" /></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            //pop-up
+                    <div id="divModal" class="modal">
+                        @Html.Raw(TempData["AlertMsg"])
+                        <!-- modal content -->
+                        <div class="modal-content">
+                            <div class="modal-body justify-content-center text-center">
+                                <img class="pb-2" style="width: 60px;" src="~/img/check-mark.png" />
+                                <h6 class="pb-2">It is Already in The Cart.</h6>
+                                <span class="btn-primary close ok">OK</span>
+                            </div>
+                        </div>
+                    </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End of menu Section -->
+    </div> 
+</body>
+</html>

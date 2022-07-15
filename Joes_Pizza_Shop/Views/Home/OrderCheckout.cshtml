@@ -1,0 +1,208 @@
+﻿@model List<Joes_Pizza_Shop.Models.CustomerOrderTable>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Order Checkout</title>
+    <!-- JS -->
+    <script src="/vendor/checkout/checkout.js"></script>
+</head>
+<body data-spy="scroll" data-target="#navbar" onload="disabledBtnProceed()">
+
+    <div class="boxed-page">
+      
+        <!-- Order Checkout Section -->
+        <section id="gtco-OrderCheckout" class="bg-fixed bg-white section-padding justify-content-center">
+            <div class="container text-center">
+                <div class="row justify-content-center pb-5">
+                    <span class="col-4 subheading-red"><strong>&#9312; Shopping Cart</strong></span>
+                    <span class="col-4" id="spanCheckoutColor"><strong>&#9313; Billing & Checkout</strong></span>
+                    <span class="col-4"><strong>&#9314; Order Confirmation</strong></span>
+                </div>
+                <!-- Shopping Cart Div -->
+                <div class="row justify-content-center" id="DivShoppingCart">
+                    <div class="col-lg-10">
+                        <div class="section-content bg-white">
+                            <div class="heading-section">
+                                <h2>
+                                    The Cart
+                                </h2>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="row mb-0 text-center">
+                                        <div class="col-1 themed-grid-col text-muted"></div>
+                                        <div class="col-3 themed-grid-col text-muted"><h6>Item Name</h6></div>
+                                        <div class="col-2 themed-grid-col text-muted"><h6>Price</h6></div>
+                                        <div class="col-3 themed-grid-col text-muted"><h6>Quantity</h6></div>
+                                        <div class="col-2 themed-grid-col text-muted"><h6>Total</h6></div>
+                                    </div>
+                                    <hr class="my-4">
+                                    <div class="Customeritems">
+                                        @foreach (var item in Model)
+                                        {
+                                            <div class="rowClass row mb-1 text-center">
+                                                <div class="col-1 themed-grid-col text-muted">
+                                                    <a href="/Home/DeleteItem/@item.CustomerOrderID" class="btn btn-primary" style="padding: 0px 3px !important;"> <img class="img-style" style="width:15px; height:15px" src="/img/x.png" /></a>
+                                                </div>
+                                                <div class="col-3 themed-grid-col text-muted">
+                                                    <h6 class="my-0">@item.PizzaItem.PizzaName</h6>
+                                                    <br />
+                                                </div>
+                                                <div class="col-2 themed-grid-col text-muted"><span class="text-muted price">$@item.PizzaItem.Price</span></div>
+                                                <div class="col-3 themed-grid-col text-muted">
+                                                    <a href="/Home/DecreaseQuantity/@item.CustomerOrderID" class="btn btn-primary" style="padding: 0px 3px !important;"> <img class="img-style" style="width:15px; height:15px" src="/img/minus.png" /></a>
+                                                    <span class="text-muted Quantity">@item.Quantity</span>
+                                                    <a href="/Home/IncreaseQuantity/@item.CustomerOrderID" class="btn btn-primary" style="padding: 0px 3px !important;"> <img class="img-style" style="width:15px; height:15px" src="/img/add.png" /></a>
+                                                </div>
+                                                <div class="col-2 themed-grid-col text-muted"><span class="text-muted Total">$@item.TotalPricePerItem</span></div>
+
+                                            </div>
+                                        }
+                                        <div id="divEmptyCart" class="heading-section text-center" style="display:none">
+                                            <span class="subheading" style="font-size:20px">@Html.Raw(TempData["msg"])</span>
+                                            <img style="width: 200px;" src="/img/empty-cart.png" />
+                                        </div>
+                                        <hr class="my-4">
+                                        <div class="row">
+                                            <div class="col-8 themed-grid-col text-muted">
+                                                <h5 class="my-0 text-left">Total Price. $@TempData["TotalAmount"]</h5>
+                                            </div>
+                                            <div class="col-4 themed-grid-col text-muted">
+                                                <button class="btn btn-lg btn-primary text-right" id="btnProceed" onclick="hideCart()">Proceed</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Payment Div -->
+                <div class="row justify-content-center" id="DivPayment" style="display:none">
+                    <div class="col-lg-9">
+                        <div class="section-content bg-white p-3 shadow">
+                            <div class="heading-section">
+                                <span class="subheading">
+                                    Order
+                                </span>
+                                <h2>
+                                    Checkout
+                                </h2>
+                            </div>
+                            @using (Html.BeginForm("Checkout", "Home", FormMethod.Post, new { @class = "needs-validation", @novalidate = "" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="col-10">
+                                            <label for="fullName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="" value="" required>
+                                            <div class="invalid-feedback">
+                                                Valid first name is required.
+                                            </div>
+                                        </div>
+
+                                        <div class="col-10">
+                                            <label for="email" class="form-label">Email</label>
+                                            <div class="input-group has-validation">
+                                                <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter a valid email address.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-10">
+                                            <label for="address" class="form-label">Address</label>
+                                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                                            <div class="invalid-feedback">
+                                                Please enter your shipping address.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-left">
+                                            <h5 class="mb-3">Payment</h5>
+                                            <div class="my-3">
+                                                <div class="form-check">
+                                                    <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
+                                                    <label class="form-check-label" for="credit">Credit card</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+                                                    <label class="form-check-label" for="debit">Debit card</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+                                                    <label class="form-check-label" for="paypal">PayPal</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row justify-content-start">
+                                            <div class="col-6">
+                                                <label for="cc-name" class="form-label">Name on card</label>
+                                                <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                                                <small class="text-muted">Full name as displayed on card</small>
+                                                <div class="invalid-feedback">
+                                                    Name on card is required
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <label for="cc-number" class="form-label">Credit card number</label>
+                                                <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                                                <div class="invalid-feedback">
+                                                    Credit card number is required
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <label for="cc-expiration" class="form-label">Exp</label>
+                                                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                                                <div class="invalid-feedback">
+                                                    Expiration date required
+                                                </div>
+                                            </div>
+
+                                            <div class="col-3">
+                                                <label for="cc-cvv" class="form-label">CVV</label>
+                                                <input type="text" class="form-control" id="cc-cvv" placeholder="" maxlength="3" required>
+                                                <div class="invalid-feedback">
+                                                    Security code required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4">
+
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-5 text-left">
+                                            <button id="btnBack" type="button" class="btn" onclick="hideCheckout()"><img style="width: 20px;" src="/img/left-arrow.png" /></button>
+                                        </div>
+                                        <div class="col-7 text-left">
+                                            <button id="btnPay" class="btn btn-primary btn-shadow btn-lg " type="submit" onclick="payment()">Pay</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End of Order Checkout Section -->
+
+    </div>
+</body>
+</html>

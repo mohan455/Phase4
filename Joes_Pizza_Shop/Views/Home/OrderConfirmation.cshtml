@@ -1,0 +1,98 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+
+    List<CustomerOrderTable> COT = ViewData["Orders Details"] as List<CustomerOrderTable>;
+    Order ord = ViewData["Order"] as Order;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body data-spy="scroll" data-target="#navbar">
+
+    <div class="boxed-page">     
+        <section id="gtco-OrderConfirmation" class="bg-fixed bg-white section-padding justify-content-center">
+            <div class="container text-center">
+                <div class="row justify-content-center pb-5">
+                    <span class="col-4 subheading-red"><strong>&#9312; Shopping Cart</strong></span>
+                    <span class="col-4 subheading-red"><strong>&#9313; Billing & Checkout</strong></span>
+                    <span class="col-4 subheading-red"><strong>&#9314; Order Confirmation</strong></span>
+                </div>
+                <div class="row justify-content-center" id="DivOrderConfirm">
+                    <div class="col-lg-10">
+                        <div class="section-content bg-white p-3 shadow">
+                            <div class="heading-section">
+                                <span class="subheading">
+                                    Confirmation
+                                </span>
+                                <h2>
+                                    The Order
+                                </h2>
+                                <img style="width: 85px;" src="/img/checked.png" />
+                                <div class="py-3">
+                                    <span class="subheading" style="font-size:18px">Order No. @ord.OrderID</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="row mb-0 text-center">
+                                        <div class="col-1 themed-grid-col text-muted"></div>
+                                        <div class="col-3 themed-grid-col text-muted"><h6>Item Name</h6></div>
+                                        <div class="col-2 themed-grid-col text-muted"><h6>Price</h6></div>
+                                        <div class="col-3 themed-grid-col text-muted"><h6>Quantity</h6></div>
+                                        <div class="col-2 themed-grid-col text-muted"><h6>Total</h6></div>
+                                    </div>
+
+
+                                    <hr class="my-4">
+                                    <div class="Customeritems">
+                                        @foreach (var item in COT)
+                                        {
+                                        <div class="rowClass row mb-1 text-center">
+                                            <div class="col-1 themed-grid-col text-muted"></div>
+                                            <div class="col-3 themed-grid-col text-muted">
+                                                <h6 class="my-0">@item.PizzaItem.PizzaName</h6>
+                                                <br />
+                                            </div>
+                                            <div class="col-2 themed-grid-col text-muted"><span class="text-muted price">$@item.PizzaItem.Price</span></div>
+                                            <div class="col-3 themed-grid-col text-muted">
+                                                <span class="text-muted Quantity">@item.Quantity</span>
+                                            </div>
+                                            <div class="col-2 themed-grid-col text-muted"><span class="text-muted Total">$@item.TotalPricePerItem</span></div>
+
+                                        </div>
+                                        }
+                                        <hr class="my-4">
+
+                                        <div class="row mb-2">
+                                            <div class="col-12 themed-grid-col text-muted">
+                                                <h5 class="my-0 text-center">Total Price. $@ord.TotalAmount</h5>
+
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2 justify-content-center">
+                                            <div class="col-6 themed-grid-col ">
+                                                <span class="subheading">Order Date. @ord.OrderDate </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- End of Order Checkout Section -->
+    </div>
+</body>
+</html>
